@@ -18,6 +18,13 @@ class Database:
         )
         self.conn.commit()
 
+    def change_username(self, id, new_username):
+        self.cursor.execute(
+            """UPDATE users SET username = ? WHERE id = ?""",
+            (new_username, id),
+        )
+        self.conn.commit()
+
     def create_user_activity_table(self):
         self.cursor.execute("DROP TABLE IF EXISTS user_activity")
         self.cursor.execute(
