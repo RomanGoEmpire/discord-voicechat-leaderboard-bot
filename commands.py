@@ -29,6 +29,15 @@ class Commands(commands.Cog):
             member = ctx.guild.get_member(user_id)
             if member:
                 display_name = member.display_name
-                line = f"#{rank} {display_name}: {convert_to_readable_time(duration)}"
+                if rank == 1:
+                    line = f"🥇 #{rank} {display_name}: {convert_to_readable_time(duration)}"
+                elif rank == 2:
+                    line = f"🥈 #{rank} {display_name}: {convert_to_readable_time(duration)}"
+                elif rank == 3:
+                    line = f"🥉 #{rank} {display_name}: {convert_to_readable_time(duration)}"
+                else:
+                    line = (
+                        f"#{rank} {display_name}: {convert_to_readable_time(duration)}"
+                    )
                 embed.description += line + "\n"
         await ctx.reply(embed=embed)
