@@ -1,31 +1,19 @@
 from discord import Color
+import discord 
 
-time_based_roles = {
-    1: "Cloud Chaser",
-    10: "Sky Explorer",
-    50: "Star Gazer",
-    100: "Moon Walker",
-    500: "Astral Voyager",
-    1000: "Galactic Nomad",
-    2000: "Celestial Navigator",
-    5000: "Time Traveler",
-    7500: "Eternal Skyfarer",
-    10000: "Supernova Sage",
-}
 
-role_colors = {
-    "Cloud_Chaser": Color.from_rgb(240, 248, 255),  # Alice Blue
-    "Sky Explorer": Color.from_rgb(173, 216, 230),  # Light Blue
-    "Star Gazer": Color.from_rgb(255, 215, 0),  # Gold
-    "Moon Walker": Color.from_rgb(255, 250, 205),  # LemonChiffon
-    "Astral Voyager": Color.from_rgb(255, 255, 0),  # Yellow
-    "Galactic Nomad": Color.from_rgb(144, 238, 144),  # LightGreen
-    "Celestial Navigator": Color.from_rgb(173, 216, 230),  # Light Blue
-    "Time Traveler": Color.from_rgb(255, 99, 71),  # Tomato
-    "Eternal Skyfarer": Color.from_rgb(255, 215, 0),  # Gold
-    "Supernova Sage": Color.from_rgb(178, 34, 34),  # Fire Brick
-}
-
+roles = [
+    {"time": 1, "name": "Cloud Chaser", "color": Color.from_rgb(240, 248, 255)},
+    {"time": 10, "name": "Sky Explorer", "color": Color.from_rgb(173, 216, 230)},
+    {"time": 50, "name": "Star Gazer", "color": Color.from_rgb(255, 215, 0)},
+    {"time": 100, "name": "Moon Walker", "color": Color.from_rgb(255, 250, 205)},
+    {"time": 500, "name": "Astral Voyager", "color": Color.from_rgb(255, 255, 0)},
+    {"time": 1000, "name": "Galactic Nomad", "color": Color.from_rgb(144, 238, 144)},
+    {"time": 2000, "name": "Celestial Navigator", "color": Color.from_rgb(173, 216, 230)},
+    {"time": 5000, "name": "Time Traveler", "color": Color.from_rgb(255, 99, 71)},
+    {"time": 7500, "name": "Eternal Skyfarer", "color": Color.from_rgb(255, 215, 0)},
+    {"time": 10000, "name": "Supernova Sage", "color": Color.from_rgb(178, 34, 34)},
+]
 
 def convert_to_readable_time(seconds):
     # display days, hours, minutes, seconds but start from the largest that is not 0
@@ -59,9 +47,24 @@ def convert_to_readable_time(seconds):
     return time_string
 
 
-async def get_or_create_role(roles, role_name):
-    role = discord.utils.get(roles, name=role_name)
+async def get_or_create_role(guild, role_name):
+    role = discord.utils.get(guild.roles, name=role_name)
     if not role:
-        color = role_colors[role_name]
+        color = get_color_based_on_role(role_name)
         role = await guild.create_role(name=role_name, color=color, hoist=True)
     return role
+
+
+def get_time_of_roles():
+    return [role.get("time") for role in roles]
+
+def get_roles_names():
+    return [role.get("name") for role in roles]
+
+def get_color_based_on_role(role_name):
+    for role in roles:
+        if role.get("name") == role_name:
+            return role.get("color")
+    raise ValueError(f"Role {role_name} not found in roles list.")
+
+

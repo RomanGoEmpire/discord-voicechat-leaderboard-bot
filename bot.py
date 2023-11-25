@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from commands import Commands
 from database import Database
-from utils import get_or_create_role, role_colors, time_based_roles
+from utils import get_or_create_role, roles, get_time_of_roles, get_roles_names
 
 
 class Bot(commands.Bot):
@@ -34,33 +34,66 @@ class Bot(commands.Bot):
                 duration = datetime.datetime.now() - bot.join_times[member.id]
                 duration = int(duration.total_seconds())
 
-                await self.add_user_activity_to_database(member, duration)
+                self.add_user_activity_to_database(member, duration)
                 await self.update_role_based_on_time(member, duration)
 
-    async def add_user_activity_to_database(self, member, duration):
+    def add_user_activity_to_database(self, member, duration):
         if not self.db.user_exists(member.id):
             print(f"Adding {member} to the database.")
             bot.db.insert_user(member.id, member.name)
-            self.db.insert_user_activity(
+        self.db.insert_user_activity(
                 member.id,
                 duration,
                 datetime.datetime.now().strftime("%Y-%m-%d"),
                 bot.join_times[member.id].strftime("%H:%M:%S"),
                 datetime.datetime.now().strftime("%H:%M:%S"),
-            )
-            del bot.join_times[member.id]
-            print(
+        )
+        del bot.join_times[member.id]
+        print(
                 f"@{member.guild.display_name} has left a voice channel. They were in the channel for {duration} seconds."
             )
 
     async def update_role_based_on_time(self, member, duration):
-        # duration = duration // 3600
-        for time, role in time_based_roles.items():
-            if duration >= time:
-                role = await get_or_create_role(member.guild, role)
-                await member.add_roles(role)
-                print(f"@{member.display_name} has been given the {role} role.")
+    
+        times = get_time_of_roles()
+        roles_names =get_roles_names()
+        times.reverse()
+        roles_names.reverse()
+        
+        # get current role 
+        current_role = None
+        for role in member.roles:
+            if role.name in roles_names:
+                current_role = role
                 break
+            
+        # get next role
+        next_role = None
+        for i, time in enumerate(times):
+            if duration >= time:
+                next_role = roles_names[i]
+                break
+        
+        # if the roles are the same, do nothing
+        if current_role and current_role.name == next_role:
+            return
+        
+        # add the next role
+        if next_role:
+            role = await get_or_create_role(member.guild, next_role)
+            await member.add_roles(role)
+            print(f"Added {role.name} to {member.name}")
+        
+            
+        
+        
+        
+        
+        
+        
+        
+            
+        
 
 
 intents = discord.Intents.default()
