@@ -31,3 +31,4 @@ class Commands(commands.Cog):
                 value=convert_to_readable_time(duration),
                 inline=False,
             )
+        await ctx.reply(embed=embed)
