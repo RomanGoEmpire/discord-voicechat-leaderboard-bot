@@ -19,9 +19,12 @@ class Bot(discord.Client):
         print(f"Message from {message.author}: {message.content}")
 
     async def on_user_update(self, before, after):
-        if before.guild.name != after.guild.name:
+        if before.name != after.name:
+            guild = before.guild  # or another guild if necessary
+            member = await guild.fetch_member(before.id)
+            username_on_server = member.display_name
             print(
-                f"{before.name} has changed their server name from {before.guild.name} to {after.guild.name}."
+                f"{before.name} has changed their username to {after.name}. Their display name on the server is {username_on_server}."
             )
 
     async def on_voice_state_update(self, member, before, after):
