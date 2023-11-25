@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from commands import Commands
 from database import Database
-from utils import colors, time_based_roles
+from utils import get_or_create_role, role_colors, time_based_roles
 
 
 class Bot(commands.Bot):
@@ -57,17 +57,10 @@ class Bot(commands.Bot):
         # duration = duration // 3600
         for time, role in time_based_roles.items():
             if duration >= time:
-                role = await self.get_or_create_role(member.guild, role)
+                role = await get_or_create_role(member.guild, role)
                 await member.add_roles(role)
                 print(f"@{member.display_name} has been given the {role} role.")
                 break
-
-    async def get_or_create_role(self, guild, role_name):
-        role = discord.utils.get(guild.roles, name=role_name)
-        if role is None:
-            color = colors[role_name]
-            role = await guild.create_role(name=role_name, color=color, hoist=True)
-        return role
 
 
 intents = discord.Intents.default()

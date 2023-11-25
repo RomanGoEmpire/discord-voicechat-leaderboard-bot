@@ -1,8 +1,12 @@
 import discord
 from discord.ext import commands
 
-from bot import role_color, time_based_roles
-from utils import convert_to_readable_time
+from utils import (
+    convert_to_readable_time,
+    get_or_create_role,
+    role_colors,
+    time_based_roles,
+)
 
 
 class Commands(commands.Cog):
@@ -49,8 +53,8 @@ class Commands(commands.Cog):
     @commands.command()
     # it should use the options from the role set
     async def add_role(self, ctx, role_name):
-        if role_name in time_based_roles:
-            role = await self.get_or_create_role(ctx.guild, role_name)
+        if role_name in role_colors.keys():
+            role = await get_or_create_role(ctx.guild.roles, role_name)
             await ctx.author.add_roles(role)
             print(f"@{ctx.author.display_name} has been given the {role} role.")
         else:

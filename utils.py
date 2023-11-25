@@ -14,7 +14,7 @@ time_based_roles = {
 }
 
 role_colors = {
-    "Cloud Chaser": Color.from_rgb(240, 248, 255),  # Alice Blue
+    "Cloud_Chaser": Color.from_rgb(240, 248, 255),  # Alice Blue
     "Sky Explorer": Color.from_rgb(173, 216, 230),  # Light Blue
     "Star Gazer": Color.from_rgb(255, 215, 0),  # Gold
     "Moon Walker": Color.from_rgb(255, 250, 205),  # LemonChiffon
@@ -57,3 +57,11 @@ def convert_to_readable_time(seconds):
     else:
         time_string += f"{seconds} seconds"
     return time_string
+
+
+async def get_or_create_role(roles, role_name):
+    role = discord.utils.get(roles, name=role_name)
+    if not role:
+        color = role_colors[role_name]
+        role = await guild.create_role(name=role_name, color=color, hoist=True)
+    return role
