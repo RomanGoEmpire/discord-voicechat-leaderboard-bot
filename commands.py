@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+from bot import role_color, time_based_roles
 from utils import convert_to_readable_time
 
 
@@ -11,7 +12,7 @@ class Commands(commands.Cog):
         self.db = db
 
     @commands.command()
-    async def uptime(self, ctx):
+    async def up(self, ctx):
         member = ctx.author
         if self.db.user_exists(member.id):
             duration = self.db.sum_user_activity(member.id)
@@ -44,3 +45,13 @@ class Commands(commands.Cog):
                     )
                 embed.description += line + "\n"
         await ctx.send(embed=embed)
+
+    @commands.command()
+    # it should use the options from the role set
+    async def add_role(self, ctx, role_name):
+        if role_name in time_based_roles:
+            role = await self.get_or_create_role(ctx.guild, role_name)
+            await ctx.author.add_roles(role)
+            print(f"@{ctx.author.display_name} has been given the {role} role.")
+        else:
+            await ctx.reply("Role not found")
