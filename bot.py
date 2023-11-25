@@ -2,37 +2,11 @@ import datetime
 
 import discord
 from decouple import config
-from discord import Color
 from discord.ext import commands
 
 from commands import Commands
 from database import Database
-
-time_based_roles = {
-    1: "Cloud Chaser",
-    10: "Sky Explorer",
-    50: "Star Gazer",
-    100: "Moon Walker",
-    500: "Astral Voyager",
-    1000: "Galactic Nomad",
-    2000: "Celestial Navigator",
-    5000: "Time Traveler",
-    7500: "Eternal Skyfarer",
-    10000: "Supernova Sage",
-}
-
-role_colors = {
-    "Cloud Chaser": Color.from_rgb(240, 248, 255),  # Alice Blue
-    "Sky Explorer": Color.from_rgb(173, 216, 230),  # Light Blue
-    "Star Gazer": Color.from_rgb(255, 215, 0),  # Gold
-    "Moon Walker": Color.from_rgb(255, 250, 205),  # LemonChiffon
-    "Astral Voyager": Color.from_rgb(255, 255, 0),  # Yellow
-    "Galactic Nomad": Color.from_rgb(144, 238, 144),  # LightGreen
-    "Celestial Navigator": Color.from_rgb(173, 216, 230),  # Light Blue
-    "Time Traveler": Color.from_rgb(255, 99, 71),  # Tomato
-    "Eternal Skyfarer": Color.from_rgb(255, 215, 0),  # Gold
-    "Supernova Sage": Color.from_rgb(178, 34, 34),  # Fire Brick
-}
+from utils import colors, time_based_roles
 
 
 class Bot(commands.Bot):
