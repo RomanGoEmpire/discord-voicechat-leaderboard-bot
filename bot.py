@@ -18,6 +18,10 @@ class Bot(discord.Client):
     async def on_message(self, message):
         print(f"Message from {message.author}: {message.content}")
 
+    async def on_user_update(self, before, after):
+        if before.name != after.name:
+            print(f"{before.name} has changed their username to {after.name}.")
+
     async def on_voice_state_update(self, member, before, after):
         # If the member was connected to a voice channel before
         if before.channel is None and after.channel is not None:
@@ -28,7 +32,6 @@ class Bot(discord.Client):
             if member.id in self.join_times:
                 duration = datetime.datetime.now() - self.join_times[member.id]
                 duration = int(duration.total_seconds())
-                del self.join_times[member.id]
 
                 if not self.db.user_exists(member.id):
                     print(f"Adding {member} to the database.")
@@ -40,6 +43,7 @@ class Bot(discord.Client):
                     self.join_times[member.id].strftime("%H:%M:%S"),
                     datetime.datetime.now().strftime("%H:%M:%S"),
                 )
+                del self.join_times[member.id]
                 print(
                     f"{member} has left a voice channel. They were in the channel for {duration} seconds."
                 )
