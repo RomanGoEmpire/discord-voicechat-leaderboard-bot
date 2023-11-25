@@ -66,6 +66,15 @@ class Database:
         )
         self.conn.commit()
 
+    def sum_user_activity(self, user_id):
+        self.cursor.execute(
+            """
+            SELECT SUM(duration) FROM user_activity WHERE user_id = ?
+        """,
+            (user_id,),
+        )
+        return self.cursor.fetchone()[0]
+
     def close(self):
         self.conn.close()
 

@@ -18,15 +18,6 @@ class Bot(discord.Client):
     async def on_message(self, message):
         print(f"Message from {message.author}: {message.content}")
 
-    async def on_user_update(self, before, after):
-        # before username
-        before_username = before.guild.fetch_member(before.id).display_name
-        # after username
-        after_username = after.guild.fetch_member(after.id).display_name
-        if before_username != after_username:
-            print(f"Username changed from {before_username} to {after_username}")
-            self.db.change_username(before.id, after_username)
-
     async def on_voice_state_update(self, member, before, after):
         # If the member was connected to a voice channel before
         if before.channel is None and after.channel is not None:
@@ -51,6 +42,20 @@ class Bot(discord.Client):
                 del self.join_times[member.id]
                 print(
                     f"{member} has left a voice channel. They were in the channel for {duration} seconds."
+                )
+
+    async def on_message(self, message):
+        if message.content.startswith("!uptime"):
+            member = message.author
+            print(member, member.id)
+            if member in self.db.user_exists(member.id):
+                duration = self.db.sum_user_activity(member.id)
+                await message.channel.send(
+                    f"{member} has been in a voice channel for {duration} seconds today."
+                )
+            else:
+                await message.channel.send(
+                    f"{member} has not been in a voice channel yet."
                 )
 
 
