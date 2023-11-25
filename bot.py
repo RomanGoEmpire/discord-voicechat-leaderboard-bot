@@ -21,6 +21,7 @@ class Bot(commands.Bot):
     @commands.Cog.listener()
     async def on_message(self, message):
         print(f"Message from {message.author}: {message.content}")
+        await self.process_commands(message)
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
@@ -76,6 +77,6 @@ class Bot(commands.Bot):
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = Bot(command_prefix="!", intents=intents)
 key = config("api_key")
-client.run(key)
+bot.run(key)
