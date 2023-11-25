@@ -13,13 +13,13 @@ class Bot(commands.Bot):
         self.join_times = {}
         self.db = Database("discord.db")
 
-        async def on_ready(self):
-            await self.load_extension("commands.Commands")
-            print(f"Logged on as {bot.user}!")
+    async def on_ready(self):
+        await self.load_extension("commands", self.db)
+        print(f"Logged on as {bot.user}!")
 
-        async def on_message(self, message):
-            print(f"Message from {message.author}: {message.content}")
-            await self.process_commands(message)
+    async def on_message(self, message):
+        print(f"Message from {message.author}: {message.content}")
+        await self.process_commands(message)
 
     async def on_voice_state_update(self, member, before, after):
         # If the member was connected to a voice channel before

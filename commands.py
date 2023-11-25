@@ -5,9 +5,10 @@ from utils import convert_to_readable_time
 
 
 class Commands(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, db):
         super().__init__()
         self.bot = bot
+        self.db = db
 
     @commands.command()
     async def uptime(self, ctx):
@@ -33,5 +34,5 @@ class Commands(commands.Cog):
             )
 
 
-async def setup(bot):
-    await bot.add_cog(Commands(bot))
+async def setup(bot, db):
+    await bot.add_cog(Commands(bot, db))
