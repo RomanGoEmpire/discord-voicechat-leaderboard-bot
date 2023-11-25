@@ -13,7 +13,6 @@ class Commands(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         member = ctx.author
-        print(member, member.id)
         if self.db.user_exists(member.id):
             duration = self.db.sum_user_activity(member.id)
             cleaned_duration = convert_to_readable_time(duration)
@@ -23,7 +22,7 @@ class Commands(commands.Cog):
 
     @commands.command()
     async def leaderboard(self, ctx):
-        leader_board = self.db.get_leaderboard()
+        leader_board = self.db.leaderboard()
 
         embed = discord.Embed(title="Leaderboard", color=0x00FF00)
         for rank, (username, duration) in enumerate(leader_board, start=1):
