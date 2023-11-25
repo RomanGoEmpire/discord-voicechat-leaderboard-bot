@@ -25,10 +25,10 @@ class Commands(commands.Cog):
         leader_board = self.db.leaderboard()
 
         embed = discord.Embed(title="Leaderboard", color=0x00FF00)
-        for rank, (username, duration) in enumerate(leader_board, start=1):
-            embed.add_field(
-                name=f"#{rank} {username}",
-                value=convert_to_readable_time(duration),
-                inline=False,
-            )
+        for rank, (user_id, duration) in enumerate(leader_board, start=1):
+            member = ctx.guild.get_member(user_id)
+            if member:
+                display_name = member.display_name
+                line = f"#{rank} {display_name}: {convert_to_readable_time(duration)}"
+                embed.description += line + "\n"
         await ctx.reply(embed=embed)
