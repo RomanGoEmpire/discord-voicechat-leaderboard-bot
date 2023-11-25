@@ -78,8 +78,7 @@ class Database:
     def leaderboard(self):
         self.cursor.execute(
             """
-            SELECT username, SUM(duration) FROM user_activity
-            INNER JOIN users ON user_activity.user_id = users.id
+            SELECT user_id, SUM(duration) FROM user_activity
             GROUP BY user_id
             ORDER BY SUM(duration) DESC
         """
