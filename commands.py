@@ -32,7 +32,3 @@ class Commands(commands.Cog):
                 value=convert_to_readable_time(duration),
                 inline=False,
             )
-
-
-async def setup(bot, db):
-    await bot.add_cog(Commands(bot, db))

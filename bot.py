@@ -4,6 +4,7 @@ import discord
 from decouple import config
 from discord.ext import commands
 
+from commands import Commands
 from database import Database
 
 
@@ -14,7 +15,7 @@ class Bot(commands.Bot):
         self.db = Database("discord.db")
 
     async def on_ready(self):
-        await self.load_extension("commands", self.db)
+        await self.add_cog(Commands(self, self.db))
         print(f"Logged on as {bot.user}!")
 
     async def on_message(self, message):
@@ -48,7 +49,7 @@ class Bot(commands.Bot):
                 )
 
 
-intents = discord.Intents.all()
+intents = discord.Intents.default()
 intents.message_content = True
 
 bot = Bot(command_prefix="!", intents=intents)
