@@ -2,13 +2,15 @@ import datetime
 
 import discord
 from decouple import config
+from discord.ext import commands
 
 from database import Database
+from utils import convert_to_readable_time
 
 
 class Bot(discord.Client):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(command_prefix="!", *args, **kwargs)
         self.join_times = {}
         self.db = Database("discord.db")
 
@@ -41,22 +43,31 @@ class Bot(discord.Client):
                 )
                 del self.join_times[member.id]
                 print(
-                    f"{member} has left a voice channel. They were in the channel for {duration} seconds."
+                    f"@{member} has left a voice channel. They were in the channel for {duration} seconds."
                 )
 
-    async def on_message(self, message):
-        if message.content.startswith("!uptime"):
-            member = message.author
-            print(member, member.id)
-            if member in self.db.user_exists(member.id):
-                duration = self.db.sum_user_activity(member.id)
-                await message.channel.send(
-                    f"{member} has been in a voice channel for {duration} seconds today."
-                )
-            else:
-                await message.channel.send(
-                    f"{member} has not been in a voice channel yet."
-                )
+    @commands.command()
+    async def uptime(self, ctx):
+        member = ctx.author
+        print(member, member.id)
+        if self.db.user_exists(member.id):
+            duration = self.db.sum_user_activity(member.id)
+            cleaned_duration = convert_to_readable_time(duration)
+            await ctx.reply(f"Total time spent in voice channels: {cleaned_duration}")
+        else:
+            await ctx.reply("You have not been in a voice channel yet.")
+
+    @commands.command()
+    async def leaderboard(self, ctx):
+        leader_board = self.db.get_leaderboard()
+
+        embed = discord.Embed(title="Leaderboard", color=0x00FF00)
+        for rank, (username, duration) in enumerate(leader_board, start=1):
+            embed.add_field(
+                name=f"#{rank} {username}",
+                value=convert_to_readable_time(duration),
+                inline=False,
+            )
 
 
 intents = discord.Intents.default()
