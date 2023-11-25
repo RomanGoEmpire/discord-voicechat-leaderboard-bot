@@ -8,18 +8,21 @@ from database import Database
 from utils import convert_to_readable_time
 
 
-class Bot(discord.Client):
+class Bot(commands.Bot):
     def __init__(self, *args, **kwargs):
-        super().__init__(command_prefix="!", *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.join_times = {}
         self.db = Database("discord.db")
 
+    @commands.Cog.listener()
     async def on_ready(self):
         print(f"Logged on as {self.user}!")
 
+    @commands.Cog.listener()
     async def on_message(self, message):
         print(f"Message from {message.author}: {message.content}")
 
+    @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         # If the member was connected to a voice channel before
         if before.channel is None and after.channel is not None:
@@ -73,6 +76,6 @@ class Bot(discord.Client):
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = Bot(intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 key = config("api_key")
 client.run(key)
