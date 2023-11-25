@@ -3,16 +3,16 @@ import discord
 
 
 roles = [
-    {"time": 1, "name": "Cloud Chaser", "color": Color.from_rgb(240, 248, 255)},
-    {"time": 10, "name": "Sky Explorer", "color": Color.from_rgb(173, 216, 230)},
-    {"time": 50, "name": "Star Gazer", "color": Color.from_rgb(255, 215, 0)},
-    {"time": 100, "name": "Moon Walker", "color": Color.from_rgb(255, 250, 205)},
-    {"time": 500, "name": "Astral Voyager", "color": Color.from_rgb(255, 255, 0)},
-    {"time": 1000, "name": "Galactic Nomad", "color": Color.from_rgb(144, 238, 144)},
-    {"time": 2000, "name": "Celestial Navigator", "color": Color.from_rgb(173, 216, 230)},
-    {"time": 5000, "name": "Time Traveler", "color": Color.from_rgb(255, 99, 71)},
-    {"time": 7500, "name": "Eternal Skyfarer", "color": Color.from_rgb(255, 215, 0)},
-    {"time": 10000, "name": "Supernova Sage", "color": Color.from_rgb(178, 34, 34)},
+    {"time": 1, "name": "Terra Novice", "color": Color.from_rgb(30, 195,  33)},
+    {"time": 10, "name": "Lunar Adept", "color": Color.from_rgb(182, 208, 220)},
+    {"time": 50, "name": "Stellar Guardian", "color": Color.from_rgb(18, 103, 130)},
+    {"time": 100, "name": "Nebula Seeker", "color": Color.from_rgb(101, 4, 139)},
+    {"time": 500, "name": "Galactic Explorer", "color": Color.from_rgb(255, 183, 3)},
+    {"time": 1000, "name": "Celestial Voyager", "color": Color.from_rgb(253, 158, 2)},
+    {"time": 2000, "name": "Intergalactic Wayfarer", "color": Color.from_rgb(251, 133, 0)},
+    {"time": 5000, "name": "Cosmic Master", "color": Color.from_rgb(187, 62, 3)},
+    {"time": 7500, "name": "Multiversal Luminary", "color": Color.from_rgb(174, 32, 18)},
+    {"time": 10000, "name": "Galaxial Overlord", "color": Color.from_rgb(170, 0, 6)},
 ]
 
 def convert_to_readable_time(seconds):
@@ -52,6 +52,7 @@ async def get_or_create_role(guild, role_name):
     if not role:
         color = get_color_based_on_role(role_name)
         role = await guild.create_role(name=role_name, color=color, hoist=True)
+        await role.edit(position=len(guild.roles)-2)
     return role
 
 
@@ -68,3 +69,28 @@ def get_color_based_on_role(role_name):
     raise ValueError(f"Role {role_name} not found in roles list.")
 
 
+def get_current_and_next_role(member, total_time):
+    
+    roles_names = get_roles_names()
+    times = get_time_of_roles()
+    roles_names.reverse()
+    times.reverse()
+    
+    current_role = None
+    next_role = None
+    
+    
+    for role in member.roles:
+        if role.name in roles_names:
+            current_role = role
+            break
+    
+    for i, time in enumerate(times):
+        if total_time >= time:
+            next_role = roles_names[i]
+            break
+    return current_role, next_role
+
+
+    
+        

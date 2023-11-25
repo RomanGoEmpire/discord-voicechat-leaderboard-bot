@@ -24,6 +24,17 @@ class Database:
             (new_username, id),
         )
         self.conn.commit()
+        
+    def create_channel_table(self):
+        self.cursor.execute("DROP TABLE IF EXISTS channel")
+        self.cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS channel (
+                channel_id INTEGER PRIMARY KEY
+            )
+        """
+        )
+        self.conn.commit()
 
     def create_user_activity_table(self):
         self.cursor.execute("DROP TABLE IF EXISTS user_activity")
@@ -65,8 +76,26 @@ class Database:
             (user_id, duration, date, joining_time, leaving_time),
         )
         self.conn.commit()
+        
+    def insert_channel(self, channel_id):
+        self.create_channel_table()
+        self.cursor.execute(
+            """
+            INSERT INTO channel (channel_id) VALUES (?)
+        """,
+            (channel_id,),
+        )
+        self.conn.commit()
+        
+    def get_channel(self):
+        self.cursor.execute(
+            """
+            SELECT channel_id FROM channel
+        """
+        )
+        return self.cursor.fetchone()[0]
 
-    def sum_user_activity(self, user_id):
+    def get_total_time(self, user_id):
         self.cursor.execute(
             """
             SELECT SUM(duration) FROM user_activity WHERE user_id = ?
@@ -93,4 +122,5 @@ if __name__ == "__main__":
     db = Database("discord.db")
     db.create_table()
     db.create_user_activity_table()
+    db.create_channel_table()
     db.close()

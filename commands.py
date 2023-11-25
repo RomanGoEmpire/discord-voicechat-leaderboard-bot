@@ -4,6 +4,8 @@ from discord.ext import commands
 from utils import (
     convert_to_readable_time,
     get_or_create_role,
+    roles,
+    get_color_based_on_role
 )
 
 
@@ -16,8 +18,9 @@ class Commands(commands.Cog):
     @commands.command()
     async def up(self, ctx):
         member = ctx.author
+        
         if self.db.user_exists(member.id):
-            duration = self.db.sum_user_activity(member.id)
+            duration = self.db.get_total_time(member.id)
             cleaned_duration = convert_to_readable_time(duration)
             await ctx.reply(f"Total time spent in voice channels: {cleaned_duration}")
         else:
@@ -25,6 +28,7 @@ class Commands(commands.Cog):
 
     @commands.command()
     async def leaderboard(self, ctx):
+        
         leader_board = self.db.leaderboard()
 
         embed = discord.Embed(title="Leaderboard", color=0x00FF00)
@@ -47,4 +51,14 @@ class Commands(commands.Cog):
                     )
                 embed.description += line + "\n"
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def init(self, ctx):
+        self.db.insert_channel(ctx.channel.id)
+        
+        embed = discord.Embed(title="Bot channel", color=0x00FF00)
+        embed.description = f"This channel has been set as the bot channel."
+        await ctx.send(embed=embed)
+        
+
 
