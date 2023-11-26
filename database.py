@@ -78,7 +78,6 @@ class Database:
         self.conn.commit()
         
     def insert_channel(self, channel_id):
-        self.create_channel_table()
         self.cursor.execute(
             """
             INSERT INTO channel (channel_id) VALUES (?)
@@ -87,14 +86,24 @@ class Database:
         )
         self.conn.commit()
         
+    def delete_channel(self, channel_id):
+        self.cursor.execute(
+            """
+            DELETE FROM channel WHERE channel_id = ?
+        """,
+            (channel_id,),
+        )
+        self.conn.commit()
+    
     def get_channel(self):
         self.cursor.execute(
             """
             SELECT channel_id FROM channel
         """
         )
-        return self.cursor.fetchone()[0]
-
+        result = self.cursor.fetchall()
+        return [row[0] for row in result]
+        
     def get_total_time(self, user_id):
         self.cursor.execute(
             """

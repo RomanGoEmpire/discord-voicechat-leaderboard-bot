@@ -47,13 +47,7 @@ def convert_to_readable_time(seconds):
     return time_string
 
 
-async def get_or_create_role(guild, role_name):
-    role = discord.utils.get(guild.roles, name=role_name)
-    if not role:
-        color = get_color_based_on_role(role_name)
-        role = await guild.create_role(name=role_name, color=color, hoist=True)
-        await role.edit(position=len(guild.roles)-2)
-    return role
+
 
 
 def get_time_of_roles():
