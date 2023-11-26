@@ -72,18 +72,17 @@ class Commands(commands.Cog):
                 role,_ = get_current_and_next_role(member,duration)
                 if member == ctx.author:
                     display_name = f"**__{display_name}__**({role})"
-                if rank == 1:
-                    line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
-                elif rank == 2:
-                    line = f"🥈{display_name}: {convert_to_readable_time(duration)}"
-                elif rank == 3:
-                    line = f"🥉{display_name}: {convert_to_readable_time(duration)}"
-                else:
-                    line = (
-                        f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
-                    )
-                    others += line + "\n"
-                    continue
+                match rank:
+                    case 1:
+                        line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
+                    case 2:
+                        line = f"🥈{display_name}: {convert_to_readable_time(duration)}"
+                    case 3:
+                        line = f"🥉{display_name}: {convert_to_readable_time(duration)}"
+                    case _:
+                        line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
+                        others += line + "\n"
+                        continue
                 top_3 += line + "\n"
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
