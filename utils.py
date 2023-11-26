@@ -2,7 +2,7 @@ from discord import Color
 import discord 
 
 
-roles = [
+ROLES = [
     {"time": 1, "name": "Terra Novice", "color": Color.from_rgb(30, 195,  33)},
     {"time": 10, "name": "Lunar Adept", "color": Color.from_rgb(182, 208, 220)},
     {"time": 50, "name": "Stellar Guardian", "color": Color.from_rgb(18, 103, 130)},
@@ -16,48 +16,35 @@ roles = [
 ]
 
 def convert_to_readable_time(seconds):
-    # display days, hours, minutes, seconds but start from the largest that is not 0
-    days = seconds // (24 * 3600)
-    seconds %= 24 * 3600
-    hours = seconds // 3600
-    seconds %= 3600
-    minutes = seconds // 60
-    seconds %= 60
+    # Define time units and their corresponding seconds
+    time_units = [("day", 24 * 3600), ("hour", 3600), ("minute", 60), ("second", 1)]
 
     time_string = ""
-    if days == 1:
-        time_string += "1 day, "
-    elif days > 1:
-        time_string += f"{days} days, "
 
-    if hours == 1:
-        time_string += "1 hour, "
-    elif hours > 1:
-        time_string += f"{hours} hours, "
+    for unit, unit_seconds in time_units:
+        if seconds >= unit_seconds:
+            unit_count = seconds // unit_seconds
+            seconds %= unit_seconds
 
-    if minutes == 1:
-        time_string += "1 minute, "
-    elif minutes > 1:
-        time_string += f"{minutes} minutes, "
+            if unit_count == 1:
+                time_string += f"{unit_count} {unit}, "
+            elif unit_count > 1:
+                time_string += f"{unit_count} {unit}s, "
 
-    if seconds == 1:
-        time_string += "1 second"
-    else:
-        time_string += f"{seconds} seconds"
+    # Remove trailing comma and space
+    time_string = time_string.rstrip(", ")
+
     return time_string
 
 
-
-
-
 def get_time_of_roles():
-    return [role.get("time") for role in roles]
+    return [role.get("time") for role in ROLES]
 
 def get_roles_names():
-    return [role.get("name") for role in roles]
+    return [role.get("name") for role in ROLES]
 
 def get_color_based_on_role(role_name):
-    for role in roles:
+    for role in ROLES:
         if role.get("name") == role_name:
             return role.get("color")
     raise ValueError(f"Role {role_name} not found in roles list.")
