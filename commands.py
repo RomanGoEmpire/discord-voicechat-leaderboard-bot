@@ -42,14 +42,16 @@ class Commands(commands.Cog):
             
             embed = discord.Embed(title=":stopwatch: Total time", color=color)
             embed.description = f"You have spent **{cleaned_duration}** in voice channels."
+            embed.add_field(name="Current Role", value=current_role)
             embed.set_footer(text="You can see the leaderboard with the !leaderboard command.")
             embed.set_thumbnail(url=member.display_avatar.url)
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
+            
         else:
             embed = discord.Embed(title=":stopwatch: Total time", color=Color.red())
             embed.description = f"You have not spent any time in voice channels yet."
             embed.set_footer(text="You can see the leaderboard with the !leaderboard command.")
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
 
     @commands.command()
     async def leaderboard(self, ctx):
@@ -67,8 +69,9 @@ class Commands(commands.Cog):
             member = await ctx.guild.fetch_member(user_id)
             if member:
                 display_name = member.display_name
+                role,_ = get_current_and_next_role(member,duration)
                 if member == ctx.author:
-                    display_name = f"__{display_name}__"
+                    display_name = f"**__{display_name}__**({role})"
                 if rank == 1:
                     line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
                 elif rank == 2:
@@ -85,7 +88,7 @@ class Commands(commands.Cog):
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
         embed.add_field(name="Others", value=others, inline=False)
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
         
     @commands.command()
     async def add(self, ctx):
