@@ -6,7 +6,7 @@ class Database:
         self.conn = sqlite3.connect(db_name)
         self.cursor = self.conn.cursor()
 
-    def create_table(self):
+    def create_user_table(self):
         self.cursor.execute("DROP TABLE IF EXISTS users")
         self.cursor.execute(
             """
@@ -24,7 +24,7 @@ class Database:
             (new_username, id),
         )
         self.conn.commit()
-        
+
     def create_channel_table(self):
         self.cursor.execute("DROP TABLE IF EXISTS channel")
         self.cursor.execute(
@@ -76,7 +76,7 @@ class Database:
             (user_id, duration, date, joining_time, leaving_time),
         )
         self.conn.commit()
-        
+
     def insert_channel(self, channel_id):
         self.cursor.execute(
             """
@@ -85,7 +85,7 @@ class Database:
             (channel_id,),
         )
         self.conn.commit()
-        
+
     def delete_channel(self, channel_id):
         self.cursor.execute(
             """
@@ -94,7 +94,7 @@ class Database:
             (channel_id,),
         )
         self.conn.commit()
-    
+
     def get_channel(self):
         self.cursor.execute(
             """
@@ -103,7 +103,7 @@ class Database:
         )
         result = self.cursor.fetchall()
         return [row[0] for row in result]
-        
+
     def get_total_time(self, user_id):
         self.cursor.execute(
             """
@@ -125,11 +125,3 @@ class Database:
 
     def close(self):
         self.conn.close()
-
-
-if __name__ == "__main__":
-    db = Database("discord.db")
-    db.create_table()
-    db.create_user_activity_table()
-    db.create_channel_table()
-    db.close()
