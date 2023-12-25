@@ -1,5 +1,5 @@
 from discord import Color
-import discord
+
 
 
 ROLES = [

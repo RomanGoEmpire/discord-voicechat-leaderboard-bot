@@ -1,2 +1,2 @@
 discord
-python-decouple
+python-dotenv
