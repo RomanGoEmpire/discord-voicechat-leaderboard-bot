@@ -3,6 +3,7 @@ import discord
 
 
 ROLES = [
+    {"time": 0, "name": "Planetary Initiate", "color": Color.from_rgb(164, 117, 81)},
     {"time": 1, "name": "Terra Novice", "color": Color.from_rgb(30, 195, 33)},
     {"time": 10, "name": "Lunar Adept", "color": Color.from_rgb(182, 208, 220)},
     {"time": 50, "name": "Stellar Guardian", "color": Color.from_rgb(18, 103, 130)},

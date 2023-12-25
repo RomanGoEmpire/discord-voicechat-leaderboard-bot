@@ -1,7 +1,7 @@
 import datetime
 
 import discord
-from decouple import config
+from dotenv import load_dotenv
 from discord.ext import commands
 
 from commands import Commands
@@ -46,12 +46,16 @@ class Bot(commands.Bot):
         await self.process_commands(message)
 
     async def on_voice_state_update(self, member, before, after):
+        # If member is in the afk channel, do nothing
+        if before.afk or after.afk:
+            return 
+        
         # If member joins a voice channel
-        if before.channel is None and after.channel is not None:
+        if before.channel is None and after.channel:
             self.join_times[member.id] = datetime.datetime.now()
             logging.info(f"Join: {member.display_name} has joined a voice channel.")
         # If member leaves a voice channel
-        elif before.channel is not None and after.channel is None:
+        elif before.channel  and after.channel is None:
             if member.id in self.join_times:
                 # calculate duration
                 duration = datetime.datetime.now() - self.join_times[member.id]
@@ -71,7 +75,7 @@ class Bot(commands.Bot):
 
     async def update_role_based_on_time(self, member, total_time):
         # convert to hours because that's what the roles are based on
-        # total_time = total_time / 3600
+        total_time = total_time / 3600
 
         current_role, next_role = get_current_and_next_role(member, total_time)
         # if the roles are the same, do nothing
@@ -148,10 +152,12 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
+load_dotenv()
+
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = Bot(command_prefix="!", intents=intents, help_command=None)
 
-key = config("api_key")
+key = os.getenv("API_KEY")
 bot.run(key)
