@@ -139,12 +139,11 @@ class Commands(commands.Cog):
             return
 
         # get the highest role
-        highest_role = ctx.author.roles
-        print(highest_role)
+        highest_role = ctx.author.roles[1].name
         roles = get_roles_names()
         time = get_time_of_roles()
 
-        embed = discord.Embed(title=":alarm_clocks: Times", color=Color.blue())
+        embed = discord.Embed(title=":alarm_clock: Times", color=Color.blue())
         embed.description = (
             "The Timeboard shows the time needed to unlock the next role.\n\n"
         )
