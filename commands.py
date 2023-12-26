@@ -142,6 +142,8 @@ class Commands(commands.Cog):
         highest_role = ctx.author.roles[1].name
         roles = get_roles_names()
         time = get_time_of_roles()
+        print(roles)
+        print(time)
 
         embed = discord.Embed(title=":alarm_clock: Times", color=Color.blue())
         embed.description = (
@@ -157,7 +159,7 @@ class Commands(commands.Cog):
                 is_highest_role = True
                 embed.add_field(
                     name=f"**{role}**",
-                    value=f"**{convert_to_readable_time(time[roles.index(role)])}**",
+                    value=f"{(time[roles.index(role)])} hours",
                     inline=False,
                 )
 
