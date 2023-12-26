@@ -44,6 +44,11 @@ class Commands(commands.Cog):
             inline=False,
         )
         embed.add_field(
+            name="!times",
+            value="Shows the time needed to unlock the a role.",
+            inline=False,
+        )
+        embed.add_field(
             name="!add",
             value="Adds the current channel as a bot channel.",
             inline=False,
@@ -139,18 +144,23 @@ class Commands(commands.Cog):
         roles = get_roles_names()
         time = get_time_of_roles()
 
-        embed = discord.Embed(title=":info: Infoboard", color=Color.blue())
+        embed = discord.Embed(title=":alarm_clocks: Times", color=Color.blue())
         embed.description = (
-            "The infoboard shows the time needed to unlock the next role.\n\n"
+            "The Timeboard shows the time needed to unlock the next role.\n\n"
         )
 
         # go through all roles and add them to the embed. Stop when the highest role is found
+        is_highest_role = False
         for role in roles:
-            embed.add_field(
-                name=role, value=f"{time[roles.index(role)]} hours", inline=True
-            )
-            if role == highest_role:
+            if is_highest_role:
                 break
+            if role == highest_role:
+                is_highest_role = True
+                embed.add_field(
+                    name=f"**{role}**",
+                    value=f"**{convert_to_readable_time(time[roles.index(role)])}**",
+                    inline=False,
+                )
 
         await ctx.send(embed=embed)
 
