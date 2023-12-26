@@ -139,12 +139,9 @@ class Commands(commands.Cog):
             return
 
         # get the highest role
-        print(ctx.author.roles)
         highest_role = ctx.author.roles[1].name
         roles = get_roles_names()
         time = get_time_of_roles()
-        print(roles)
-        print(time)
 
         embed = discord.Embed(title=":alarm_clock: Times", color=Color.blue())
         embed.description = (
@@ -158,11 +155,11 @@ class Commands(commands.Cog):
                 break
             if role == highest_role:
                 is_highest_role = True
-                embed.add_field(
-                    name=f"**{role}**",
-                    value=f"{(time[roles.index(role)])} hours",
-                    inline=False,
-                )
+            embed.add_field(
+                name=f"**{role}**",
+                value=f"{(time[roles.index(role)])} hours",
+                inline=False,
+            )
 
         await ctx.send(embed=embed)
 

@@ -102,7 +102,6 @@ class Database:
         """
         )
         result = self.cursor.fetchall()
-        print(result)
         return [row[0] for row in result]
 
     def get_total_time(self, user_id):
