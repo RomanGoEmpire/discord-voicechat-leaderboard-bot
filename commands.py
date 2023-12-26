@@ -139,6 +139,7 @@ class Commands(commands.Cog):
             return
 
         # get the highest role
+        print(ctx.author.roles)
         highest_role = ctx.author.roles[1].name
         roles = get_roles_names()
         time = get_time_of_roles()
