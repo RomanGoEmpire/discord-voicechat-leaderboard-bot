@@ -129,6 +129,34 @@ class Commands(commands.Cog):
         await ctx.reply(embed=embed)
 
     @commands.command()
+    async def times(self, ctx):
+        if not self.is_bot_channel(ctx):
+            return
+
+        # get the highest role
+        highest_role = ctx.author.roles
+        print(highest_role)
+        roles = get_roles_names()
+        time = get_time_of_roles()
+
+        embed = discord.Embed(title=":info: Infoboard", color=Color.blue())
+        embed.description = (
+            "The infoboard shows the time needed to unlock the next role.\n\n"
+        )
+
+        # go through all roles and add them to the embed. Stop when the highest role is found
+        for role in roles:
+            embed.add_field(
+                name=role, value=f"{time[roles.index(role)]} hours", inline=True
+            )
+            if role == highest_role:
+                break
+
+        await ctx.send(embed=embed)
+
+        # get all
+
+    @commands.command()
     async def add(self, ctx):
         await self.verify_admin(ctx)
 

@@ -48,30 +48,38 @@ class Bot(commands.Bot):
     async def on_voice_state_update(self, member, before, after):
         # If member is in the afk channel, do nothing
         if before.afk or after.afk:
-            return 
-        
+            if member.id in self.join_times:
+                # if the member got moved to the afk channel handle it like a leave
+                self.calculate_duration_and_save_to_database(member)
+                return
+
         # If member joins a voice channel
         if before.channel is None and after.channel:
             self.join_times[member.id] = datetime.datetime.now()
             logging.info(f"Join: {member.display_name} has joined a voice channel.")
         # If member leaves a voice channel
-        elif before.channel  and after.channel is None:
-            if member.id in self.join_times:
-                # calculate duration
-                duration = datetime.datetime.now() - self.join_times[member.id]
-                duration = int(duration.total_seconds())
-                # add time to database
-                self.add_user_activity_to_database(member, duration)
-                logging.info(
-                    f"Leave: {member.display_name} has left a voice channel after {convert_to_readable_time(duration)}"
-                )
-                # get total time and update role if necessary
-                total_duration = self.db.get_total_time(member.id)
-                await self.update_role_based_on_time(member, total_duration)
-            else:
-                logging.warning(
-                    f"Leave: {member.display_name} has left a voice channel without joining one."
-                )
+        elif before.channel and after.channel is None:
+            # could be that the bot started afterr the member joined a voice channel.
+            # ignore this case
+            await self.calculate_duration_and_save_to_database(member)
+
+    async def calculate_duration_and_save_to_database(self, member):
+        if member.id in self.join_times:
+            # calculate duration
+            duration = datetime.datetime.now() - self.join_times[member.id]
+            duration = int(duration.total_seconds())
+            # add time to database
+            self.add_user_activity_to_database(member, duration)
+            logging.info(
+                f"Leave: {member.display_name} has left a voice channel after {convert_to_readable_time(duration)}"
+            )
+            # get total time and update role if necessary
+            total_duration = self.db.get_total_time(member.id)
+            await self.update_role_based_on_time(member, total_duration)
+        else:
+            logging.warning(
+                f"Leave: {member.display_name} has left a voice channel without joining one."
+            )
 
     async def update_role_based_on_time(self, member, total_time):
         # convert to hours because that's what the roles are based on
@@ -92,6 +100,7 @@ class Bot(commands.Bot):
 
         # send a message to the first Bot channel
         channel = self.db.get_channel()
+        print(channel)
         # get color based on role
         color = color_based_on_role(next_role)
         embed = discord.Embed(title=":tada: Level up!", color=color)
