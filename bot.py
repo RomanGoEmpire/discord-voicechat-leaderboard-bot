@@ -100,7 +100,6 @@ class Bot(commands.Bot):
 
         # send a message to the first Bot channel
         channel = self.db.get_channel()
-        print(channel)
         # get color based on role
         color = color_based_on_role(next_role)
         embed = discord.Embed(title=":tada: Level up!", color=color)
