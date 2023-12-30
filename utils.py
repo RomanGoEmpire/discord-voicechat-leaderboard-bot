@@ -1,7 +1,6 @@
 from discord import Color
 
 
-
 ROLES = [
     {"time": 0, "name": "Planetary Initiate", "color": Color.from_rgb(164, 117, 81)},
     {"time": 1, "name": "Terra Novice", "color": Color.from_rgb(30, 195, 33)},
@@ -27,7 +26,7 @@ ROLES = [
 
 def convert_to_readable_time(seconds):
     # Define time units and their corresponding seconds
-    time_units = [("day", 24 * 3600), ("hour", 3600), ("minute", 60), ("second", 1)]
+    time_units = [("d", 24 * 3600), ("h", 3600), ("m", 60), ("s", 1)]
 
     time_string = ""
 
@@ -36,10 +35,7 @@ def convert_to_readable_time(seconds):
             unit_count = seconds // unit_seconds
             seconds %= unit_seconds
 
-            if unit_count == 1:
-                time_string += f"{unit_count} {unit}, "
-            elif unit_count > 1:
-                time_string += f"{unit_count} {unit}s, "
+            time_string += f"{unit_count} {unit}, "
 
     # Remove trailing comma and space
     time_string = time_string.rstrip(", ")
