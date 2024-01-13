@@ -109,7 +109,10 @@ class Commands(commands.Cog):
 
         top_3 = ""
         others = ""
+        count = 0
         for rank, (user_id, duration) in enumerate(leader_board, start=1):
+            if count == 20:
+                break
             member = await ctx.guild.fetch_member(user_id)
             if member:
                 display_name = member.display_name
@@ -128,6 +131,8 @@ class Commands(commands.Cog):
                         others += line + "\n"
                         continue
                 top_3 += line + "\n"
+                count += 1
+
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
         embed.add_field(name="Others", value=others, inline=False)
@@ -162,8 +167,7 @@ class Commands(commands.Cog):
             )
 
         await ctx.send(embed=embed)
-
-        # get all
+        
 
     @commands.command()
     async def add(self, ctx):
