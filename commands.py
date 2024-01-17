@@ -112,26 +112,26 @@ class Commands(commands.Cog):
         top_3 = ""
         others = ""
         count = 0
-        for rank, (user_id, duration) in enumerate(leader_board, start=1):
-            member = await ctx.guild.fetch_member(user_id)
-            if member:
-                display_name = member.display_name
-                role, _ = get_current_and_next_role(member, duration)
-                if member == ctx.author:
-                    display_name = f"**__{display_name}__**({role})"
-                match rank:
-                    case 1:
-                        line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
-                    case 2:
-                        line = f"🥈{display_name}: {convert_to_readable_time(duration)}"
-                    case 3:
-                        line = f"🥉{display_name}: {convert_to_readable_time(duration)}"
-                    case _:
-                        line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
-                        others += line + "\n"
-                        continue
-                top_3 += line + "\n"
-                count += 1
+        # for rank, (user_id, duration) in enumerate(leader_board, start=1):
+        #     member = await ctx.guild.fetch_member(user_id)
+        #     if member:
+        #         display_name = member.display_name
+        #         role, _ = get_current_and_next_role(member, duration)
+        #         if member == ctx.author:
+        #             display_name = f"**__{display_name}__**({role})"
+        #         match rank:
+        #             case 1:
+        #                 line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
+        #             case 2:
+        #                 line = f"🥈{display_name}: {convert_to_readable_time(duration)}"
+        #             case 3:
+        #                 line = f"🥉{display_name}: {convert_to_readable_time(duration)}"
+        #             case _:
+        #                 line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
+        #                 others += line + "\n"
+        #                 continue
+        #         top_3 += line + "\n"
+        #         count += 1
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
         embed.add_field(name="Others", value=others, inline=False)
