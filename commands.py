@@ -113,8 +113,6 @@ class Commands(commands.Cog):
         others = ""
         count = 0
         for rank, (user_id, duration) in enumerate(leader_board, start=1):
-            if count == 15:
-                break
             member = await ctx.guild.fetch_member(user_id)
             if member:
                 display_name = member.display_name
