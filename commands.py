@@ -102,7 +102,7 @@ class Commands(commands.Cog):
             return
 
         leader_board = self.db.leaderboard()
-        print(leader_board)
+        print(f"leaderboard: {leader_board}")
 
         embed = discord.Embed(title=":trophy: Leaderboard", color=Color.gold())
         embed.description = (
@@ -137,8 +137,8 @@ class Commands(commands.Cog):
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
         embed.add_field(name="Others", value=others, inline=False)
-        print(embed)
-        print(await ctx.reply(embed=embed))
+        print(f"embed: {embed}")
+        await ctx.reply(embed=embed)
 
     @commands.command()
     async def times(self, ctx):
