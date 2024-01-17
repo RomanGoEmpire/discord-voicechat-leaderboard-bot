@@ -115,6 +115,7 @@ class Commands(commands.Cog):
         count = 0
         for rank, (user_id, duration) in enumerate(leader_board, start=1):
             member = await ctx.guild.fetch_member(user_id)
+            print(f"rank: {rank}, member: {member}")
             if member:
                 display_name = member.display_name
                 role, _ = get_current_and_next_role(member, duration)
