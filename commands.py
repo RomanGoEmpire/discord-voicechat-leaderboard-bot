@@ -112,7 +112,6 @@ class Commands(commands.Cog):
         top_3 = ""
         top_20 = ""
         others = ""
-        count = 0
         for rank, (user_id, duration) in enumerate(leader_board, start=1):
             member = await ctx.guild.fetch_member(user_id)
             print(f"rank: {rank}, member: {member}")
@@ -123,20 +122,20 @@ class Commands(commands.Cog):
                     display_name = f"**__{display_name}__**({role})"
                 if rank == 1:
                     line = f"🥇{display_name}: {convert_to_readable_time(duration)}"
+                    top_3 += line + "\n"
                 elif rank == 2:
                     line = f"🥈{display_name}: {convert_to_readable_time(duration)}"
+                    top_3 += line + "\n"
                 elif rank == 3:
                     line = f"🥉{display_name}: {convert_to_readable_time(duration)}"
+                    top_3 += line + "\n"
                 elif rank <= 20:
                     line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
                     top_20 += line + "\n"
-                    continue
                 else:
                     line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
                     others += line + "\n"
-                    continue
-                top_3 += line + "\n"
-                count += 1
+        print("done")
 
         print(top_3)
         print(top_20)
