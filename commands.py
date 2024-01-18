@@ -98,11 +98,9 @@ class Commands(commands.Cog):
     @commands.command()
     async def leaderboard(self, ctx):
         if not self.is_bot_channel(ctx):
-            print("not bot channel")
             return
 
         leader_board = self.db.leaderboard()
-        print(f"leaderboard: {leader_board}")
 
         embed = discord.Embed(title=":trophy: Leaderboard", color=Color.gold())
         embed.description = (
@@ -114,7 +112,6 @@ class Commands(commands.Cog):
         others = ""
         for rank, (user_id, duration) in enumerate(leader_board, start=1):
             member = await ctx.guild.fetch_member(user_id)
-            print(f"rank: {rank}, member: {member}")
             if member:
                 display_name = member.display_name
                 role, _ = get_current_and_next_role(member, duration)
@@ -135,16 +132,9 @@ class Commands(commands.Cog):
                 else:
                     line = f"**#{rank}** {display_name}: {convert_to_readable_time(duration)}"
                     others += line + "\n"
-        print("done")
-
-        print(top_3)
-        print(top_20)
-        print(others)
 
         embed.add_field(name="Top 3", value=top_3, inline=False)
         embed.add_field(name="Top 20", value=top_20, inline=False)
-        embed.add_field(name="Others", value=others, inline=False)
-        print(f"embed: {embed}")
         await ctx.reply(embed=embed)
 
     @commands.command()
