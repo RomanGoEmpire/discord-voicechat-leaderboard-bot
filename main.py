@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+
 import discord
 from discord.channel import TextChannel
 from discord.client import Client
@@ -93,7 +94,7 @@ async def on_message(message: Message):
 @client.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
     # joined a channel
-    if before.channel is None:
+    if before.channel is None or before.afk:
         # handle error case
         if members_in_voice.get(member.id):
             await send_message_to_admin(
