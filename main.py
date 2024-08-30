@@ -14,18 +14,18 @@ from icecream import ic
 from surrealdb import Surreal
 
 ROLES = {
-    0: {"name": "Villager", "duration": 1, "color": "#8B4513"},
-    1: {"name": "Farmer", "duration": 2, "color": "#228B22"},
-    2: {"name": "Merchant", "duration": 4, "color": "#CD853F"},
-    3: {"name": "Blacksmith", "duration": 8, "color": "#939DA3"},
-    4: {"name": "Apprentice", "duration": 16, "color": "#FFA07A"},
-    5: {"name": "Archer", "duration": 32, "color": "#2E8B57"},
-    6: {"name": "Swordsman", "duration": 64, "color": "#A52A2A"},
-    7: {"name": "Paladin", "duration": 128, "color": "#F0E68C"},
-    8: {"name": "Mystic Seer", "duration": 256, "color": "#9932CC"},
-    9: {"name": "Dragon Rider", "duration": 512, "color": "#CC3300"},
-    10: {"name": "High Sorcerer", "duration": 1024, "color": "#663399"},
-    11: {"name": "Eternal Guardian", "duration": 2048, "color": "#FFD700"},
+    1: {"name": "Villager", "duration": 1, "color": "#8B4513"},
+    2: {"name": "Farmer", "duration": 2, "color": "#228B22"},
+    3: {"name": "Merchant", "duration": 4, "color": "#CD853F"},
+    4: {"name": "Blacksmith", "duration": 8, "color": "#939DA3"},
+    5: {"name": "Apprentice", "duration": 16, "color": "#FFA07A"},
+    6: {"name": "Archer", "duration": 32, "color": "#2E8B57"},
+    7: {"name": "Swordsman", "duration": 64, "color": "#A52A2A"},
+    8: {"name": "Paladin", "duration": 128, "color": "#F0E68C"},
+    9: {"name": "Mystic Seer", "duration": 256, "color": "#9932CC"},
+    10: {"name": "Dragon Rider", "duration": 512, "color": "#CC3300"},
+    11: {"name": "High Sorcerer", "duration": 1024, "color": "#663399"},
+    12: {"name": "Eternal Guardian", "duration": 2048, "color": "#FFD700"},
 }
 
 
