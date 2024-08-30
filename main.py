@@ -254,7 +254,7 @@ async def create_or_get_role(
     role_name = ROLES[new_rank]["name"]
     new_color = Color.from_str(ROLES[new_rank]["color"])
     role = discord.utils.get(guild.roles, name=role_name)
-    last_role = discord.utils.get(guild.roles, name=ROLES[new_rank - 1]["name"])
+    last_role = discord.utils.get(guild.roles, name=ROLES[new_rank]["name"])
     if not role:
         role = await guild.create_role(name=role_name, color=new_color, hoist=True)
     return role, last_role
