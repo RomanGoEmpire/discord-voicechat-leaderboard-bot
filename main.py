@@ -117,7 +117,8 @@ async def send_leaderboard(message: Message) -> None:
         """
         SELECT member.*, math::sum(duration) AS duration
         FROM history
-        GROUP BY member.*;
+        GROUP BY member.*
+        ORDER BY duration DESC;
         """
     )
 
@@ -126,7 +127,7 @@ async def send_leaderboard(message: Message) -> None:
     leaderboard = "**🚀 Leaderboard**\n"
     for i, m in enumerate(members):
         duration = formatted_duration(m["duration"])
-        leaderboard += f"{i + 1}: {m["member"]["name"]} - {duration}"
+        leaderboard += f"{i + 1}: {m["member"]["name"]} - {duration}\n"
     await bot_channel.send(leaderboard)
 
 
