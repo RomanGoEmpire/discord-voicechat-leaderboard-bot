@@ -1,10 +1,7 @@
-from logging import logProcesses
 import os
 from datetime import datetime
 
-
 import discord
-from discord.channel import TextChannel
 from discord.client import Client
 from discord.colour import Color
 from discord.member import Member, VoiceState
@@ -14,6 +11,8 @@ from dotenv import load_dotenv
 from icecream import ic
 from surrealdb import Surreal
 
+HOUR = 3600
+TOTAL_ROLES = 12
 ROLES = {
     1: {"name": "Villager", "duration": 1, "color": "#8B4513"},
     2: {"name": "Farmer", "duration": 2, "color": "#228B22"},
@@ -165,7 +164,7 @@ async def handle_leave_channel(member: Member):
     assert isinstance(db_member, dict), "member is not a list"
 
     await add_history(member)
-    highest_rank = await get_highest_rank()
+    highest_rank = await hightest_rank()
     next_rank = await possible_db_rankup(member, db_member, db_member_id)
 
     if next_rank:
@@ -197,7 +196,7 @@ async def add_history(member: Member) -> None:
     )
 
 
-async def get_highest_rank() -> int:
+async def hightest_rank() -> int:
     highest_rank = await db.query(
         """
         SELECT *
@@ -213,12 +212,6 @@ async def get_highest_rank() -> int:
 async def possible_db_rankup(
     member: Member, db_member: dict, db_member_id: str
 ) -> int | None:
-    current_rank = db_member["rank"]
-    next_rank = current_rank + 1
-
-    if len(ROLES) == next_rank:
-        return
-
     summed_duration = await db.query(
         f"""
         SELECT member, math::sum(duration) AS summed_duration
@@ -229,10 +222,15 @@ async def possible_db_rankup(
     )
     summed_duration = summed_duration[0]["result"][0]["summed_duration"]
 
-    duration_next_rank = ROLES[next_rank]["duration"] * 3600
-    if summed_duration >= duration_next_rank:
-        await db.query(f"UPDATE {db_member_id} SET rank+=1")
-        return next_rank
+    for next_rank in range(TOTAL_ROLES, 0, -1):
+        if next_rank == TOTAL_ROLES:
+            return
+
+        duration_next_rank = ROLES[next_rank]["duration"] * HOUR
+
+        if summed_duration >= duration_next_rank:
+            await db.query(f"UPDATE {db_member_id} SET rank={next_rank}")
+            return next_rank
 
 
 async def send_level_up_message(
