@@ -165,6 +165,8 @@ async def handle_leave_channel(member: Member):
 
     await add_history(member)
     highest_rank = await hightest_rank()
+
+    current_rank = db_member["rank"]
     next_rank = await possible_db_rankup(member, db_member, db_member_id)
 
     if next_rank:
@@ -172,7 +174,9 @@ async def handle_leave_channel(member: Member):
 
         await send_level_up_message(member, next_rank, highest_rank, new_color)
 
-        role, last_role = await create_or_get_role(member, next_rank, new_color)
+        role, last_role = await create_or_get_role(
+            member, current_rank, next_rank, new_color
+        )
         await member.add_roles(role)
         if last_role:
             await member.remove_roles(last_role)
@@ -248,7 +252,7 @@ async def send_level_up_message(
 
 
 async def create_or_get_role(
-    member: Member, new_rank: int, color: Color
+    member: Member, current_rank: int, new_rank: int, color: Color
 ) -> tuple[Role, Role]:
     guild = member.guild
     role_name = ROLES[new_rank]["name"]
@@ -257,7 +261,7 @@ async def create_or_get_role(
     if not role:
         role = await guild.create_role(name=role_name, color=new_color, hoist=True)
 
-    last_role = discord.utils.get(guild.roles, name=ROLES[new_rank - 1]["name"])
+    last_role = discord.utils.get(guild.roles, name=ROLES[current_rank]["name"])
     return role, last_role
 
 
