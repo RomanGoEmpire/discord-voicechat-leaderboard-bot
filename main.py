@@ -260,8 +260,10 @@ async def create_or_get_role(
     role = discord.utils.get(guild.roles, name=role_name)
     if not role:
         role = await guild.create_role(name=role_name, color=new_color, hoist=True)
-
-    last_role = discord.utils.get(guild.roles, name=ROLES[current_rank]["name"])
+        await role.edit(position=1)
+    last_role = None
+    if current_rank > 0:
+        last_role = discord.utils.get(guild.roles, name=ROLES[current_rank]["name"])
     return role, last_role
 
 
