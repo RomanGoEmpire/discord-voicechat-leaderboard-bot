@@ -167,6 +167,9 @@ async def handle_leave_channel(member: Member):
     highest_rank = await hightest_rank()
 
     current_rank = db_member["rank"]
+    if current_rank == TOTAL_ROLES:
+        return
+
     next_rank = await possible_db_rankup(member, db_member, db_member_id)
 
     if next_rank:
@@ -227,9 +230,6 @@ async def possible_db_rankup(
     summed_duration = summed_duration[0]["result"][0]["summed_duration"]
 
     for next_rank in range(TOTAL_ROLES, 0, -1):
-        if next_rank == TOTAL_ROLES:
-            return
-
         duration_next_rank = ROLES[next_rank]["duration"] * HOUR
 
         if summed_duration >= duration_next_rank:
