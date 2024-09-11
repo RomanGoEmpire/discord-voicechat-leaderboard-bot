@@ -243,7 +243,7 @@ async def send_level_up_message(
     embed = discord.Embed(title=":tada: Level up!", color=color)
 
     if next_rank > highest_rank:
-        embed.description = f"@everyone\n{member.mention} is the first one to level up to {ROLES[next_rank]["name"]}!!!\nThis person spend more than {ROLES[next_rank]["duration"]} hours in Voice!"
+        embed.description = f"{member.mention} is the first one to level up to {ROLES[next_rank]["name"]}!!!\nThis person spend more than {ROLES[next_rank]["duration"]} hours in Voice!"
     else:
         embed.description = f"{member.mention} leveled up to {ROLES[next_rank]["name"]}"
 
