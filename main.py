@@ -232,7 +232,7 @@ async def possible_db_rankup(
     for next_rank in range(TOTAL_ROLES, 0, -1):
         duration_next_rank = ROLES[next_rank]["duration"] * HOUR
 
-        if summed_duration >= duration_next_rank:
+        if summed_duration >= duration_next_rank and next_rank > db_member["rank"]:
             await db.query(f"UPDATE {db_member_id} SET rank={next_rank}")
             return next_rank
 
